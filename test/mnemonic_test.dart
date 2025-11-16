@@ -1,8 +1,6 @@
 import 'package:bdk_dart/bdk.dart';
 import 'package:test/test.dart';
 
-import 'test_constants.dart';
-
 void main() {
   group('Mnemonic', () {
     test('produces expected BIP86 descriptor', () {
