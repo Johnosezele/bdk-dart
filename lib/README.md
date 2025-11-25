@@ -85,3 +85,42 @@ scripts in `scripts/`.
   ```bash
   find android/libs -name "libbdkffi.so"
   ```
+
+## Flutter demo (`bdk_demo/`)
+
+Once the native artifacts are staged you can run the sample Flutter app to confirm
+the bindings load end-to-end.
+
+### Prerequisites
+
+1. Generate bindings and host libraries:
+   ```bash
+   ./scripts/generate_bindings.sh
+   ./scripts/generate_bindings.sh --target android
+   ```
+2. Stage Android shared objects into the app’s `jniLibs` (repeat per update):
+   ```bash
+   bash ./scripts/build-android.sh --output bdk_demo/android/app/src/main/jniLibs
+   ```
+
+### Run the app
+
+```bash
+cd bdk_demo
+flutter pub get
+flutter run       
+```
+
+The Android variant uses a small MethodChannel to discover where the system
+actually deploys `libbdkffi.so` (some devices nest ABI folders under
+`nativeLibraryDir`). That path is fed back into Dart so the generated loader in
+`lib/bdk.dart` can `dlopen` the correct slice.
+
+### What the demo verifies
+
+- The native dynamic library loads on-device via the generated FFI loader.
+- A BIP84 descriptor string is constructed through the Dart bindings and displayed to the UI.
+- The UI badge switches between success and error states, so you immediately see
+  if the bindings failed to load or threw during descriptor creation (delete the android artifacts and rerun the app to simulate a failure).
+
+Use this screen as a smoke test after rebuilding bindings or regenerating artifacts; if it turns green and shows `Network: testnet` the demo is exercising the FFI surface successfully.
