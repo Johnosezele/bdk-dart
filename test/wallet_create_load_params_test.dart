@@ -82,6 +82,10 @@ void main() {
         );
 
         expect(reopenedWallet.network(), equals(Network.testnet));
+        expect(
+          reopenedWallet.derivationIndex(keychain: KeychainKind.external_),
+          equals(0),
+        );
 
         final peeked = reopenedWallet.peekAddress(
           keychain: KeychainKind.external_,
@@ -149,6 +153,10 @@ void main() {
           );
 
           expect(reopenedWallet.network(), equals(Network.testnet));
+          expect(
+            reopenedWallet.derivationIndex(keychain: KeychainKind.external_),
+            equals(0),
+          );
 
           final peeked = reopenedWallet.peekAddress(
             keychain: KeychainKind.external_,
